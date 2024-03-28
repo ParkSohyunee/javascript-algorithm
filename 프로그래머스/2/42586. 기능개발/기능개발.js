@@ -10,12 +10,12 @@ function solution(progresses, speeds) {
   let max = complete[0];
   result.push(1);
 
-  for (let i = 1; i < complete.length; i++) {
+  for (let i = 1, j = 0; i < complete.length; i++) {
     if (complete[i] <= max) {
       result[result.length - 1] += 1;
     } else {
       max = complete[i];
-      result.push(1);
+      result[++j] = 1;
     }
   }
   return result;
