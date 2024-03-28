@@ -6,11 +6,7 @@ function solution(s) {
   }
 
   for (let i = 1; i < s.length; i++) {
-    if (s[i] === "(") {
-      sum += 1;
-    } else {
-      sum -= 1;
-    }
+    sum += s[i] === "(" ? 1 : -1;
 
     if (sum < 0) {
       return false;
