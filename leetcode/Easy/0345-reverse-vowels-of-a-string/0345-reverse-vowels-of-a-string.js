@@ -4,22 +4,32 @@
  */
 function reverseVowels(s) {
   const vowels = ["a", "e", "i", "o", "u"];
-  const searchedVowels = [];
+  const answer = s.split("");
 
-  // s를 돌면서, 모음을 발견하면, 모음 배열에 저장
-  for (i = s.length - 1; i >= 0; i--) {
-    if (vowels.includes(s[i].toLowerCase())) {
-      searchedVowels.push(s[i]);
-    }
+  let start = 0;
+  let end = s.length - 1;
+
+  if (s.length <= 1) {
+    return s;
   }
 
-  // s를 돌면서, 모음이었던 인덱스 자리에 모음 배열을 역순으로 넣기
-  const arrayString = s.split("");
-
-  for (i = 0; i < arrayString.length; i++) {
-    if (vowels.includes(arrayString[i].toLowerCase())) {
-      arrayString[i] = searchedVowels.shift();
+  while (end >= start) {
+    if (
+      vowels.includes(s[start].toLowerCase()) &&
+      vowels.includes(s[end].toLowerCase())
+    ) {
+      answer[start] = s[end];
+      answer[end] = s[start];
+      start++;
+      end--;
+    } else if (vowels.includes(s[start].toLowerCase())) {
+      end--;
+    } else if (vowels.includes(s[end].toLowerCase())) {
+      start++;
+    } else {
+      start++;
+      end--;
     }
   }
-  return arrayString.join("");
+  return answer.join("");
 }
