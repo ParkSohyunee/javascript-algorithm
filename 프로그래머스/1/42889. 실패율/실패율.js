@@ -1,36 +1,29 @@
+// 리팩토링한 부분
+// 1. challenger 배열 초기화로 도전자 수 구하기
+// 2. 스테이지별 실패율 계산 로직 수정
 function solution(N, stages) {
-  const answer = [];
-  const failedArr = [];
+  // 스테이지별 도전지 수
+  const challenger = new Array(N + 2).fill(0); // index가 0부터 시작하고, N+1 단계까지 갈 수 있으므로
+  for (const stage of stages) {
+    challenger[stage] += 1;
+  }
 
-  stages.sort((a, b) => a - b);
+  // 각 스테이지의 실패율 구하기
+  // 스테이지에 도달했으나 아직 클리어하지 못한 플레이어의 수 / 스테이지에 도달한 플레이어 수
+  const failArr = [];
+  let total = stages.length;
 
-  // 1. stages 단계를 반복하면서
   for (let i = 1; i <= N; i++) {
-    let start = stages.indexOf(i);
-    let last = stages.lastIndexOf(i);
-    let percentage;
-
-    // 스테이지에 도달한 유저가 없거나, 스테이지를 넘어선 유저만 있을 때
-    if (start === -1) {
-      percentage = 0;
-      failedArr.push([i, percentage]);
+    if (challenger[i] === 0) {
+      // 스테이지에 도달한 유저가 없는 경우 해당 스테이지의 실패율은 0
+      failArr.push([i, 0]);
       continue;
     }
-
-    // 2-1. N과 같은 개수와
-    // 2-2. N과 같거나 큰 개수를 구하여
-    const stayUser = last - start + 1;
-    const total = stages.length - start;
-
-    // 3. 실패율을 계산하고 저장 (실패율은 스테이지순으로 저장)
-    percentage = stayUser / total;
-    failedArr.push([i, percentage]);
+    failArr.push([i, challenger[i] / total]);
+    total = total - challenger[i]; // 다음 실패율을 계산하기 위한 총 플레이어 수
   }
-  // 4. 실패율이 놓은 스테이지부터 내림차순으로 정렬
-  const sortedFailedArr = failedArr.sort((a, b) => b[1] - a[1]);
+  // 내림차순으로 정렬
+  const result = failArr.sort((a, b) => b[1] - a[1]);
 
-  for (let i = 0; i < sortedFailedArr.length; i++) {
-    answer.push(sortedFailedArr[i][0]);
-  }
-  return answer;
+  return result.map((el) => Number(el[0]));
 }
